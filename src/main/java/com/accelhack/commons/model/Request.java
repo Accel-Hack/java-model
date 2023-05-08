@@ -25,7 +25,7 @@ public class Request<Req extends Operand> {
     }
     List<ResponseError> operandErrors = toList(validator.validate(operand));
     if (!operandErrors.isEmpty()) {
-      return ResponseSet.operandError(HttpStatus.OK, requestErrors);
+      return ResponseSet.operandError(HttpStatus.OK, operandErrors);
     }
     return null;
   }
