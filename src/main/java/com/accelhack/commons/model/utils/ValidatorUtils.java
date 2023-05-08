@@ -5,15 +5,15 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ValidatorUtils {
   public static <Req, Res> ResponseSet<Res> validate(Validator validator, Req var1, Class<?>... var2) {
-    return switch (var1) {
-      case Request<?> request -> request.validate(validator);
-      default -> toResponseSet(validator.validate(var1, var2));
-    };
+    // FIXME: change to new switch syntax in java 21
+    if (Objects.requireNonNull(var1) instanceof Request<?> request) {
+      return request.validate(validator);
+    }
+    return toResponseSet(validator.validate(var1, var2));
   }
 
   private static <Req, Res> ResponseSet<Res> toResponseSet(Set<ConstraintViolation<Req>> violations) {
